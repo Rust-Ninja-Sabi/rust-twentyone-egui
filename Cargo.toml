@@ -1,0 +1,15 @@
+[package]
+name = "rust-twentyone-egui"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "*"
+strum_macros = "*"
+strum = { version = "*", features = ["derive"] }
+egui = "0.21"
+egui_extras = {version = "0.21", features = ["image"] }
+image = { version = "0.24", default-features = false, features = ["png"] }
+eframe = { version = "0.21", features = ["persistence"] }
