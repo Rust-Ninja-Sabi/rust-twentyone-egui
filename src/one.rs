@@ -1,3 +1,12 @@
+use std::fmt::{Display, Formatter};
+
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
+
+use rand::{Rng,thread_rng};
+use rand::prelude::SliceRandom;
+
+#[derive(Debug, EnumIter, Copy, Clone)]
 enum Suit {
     Diamonds,
     Clubs,
@@ -16,6 +25,7 @@ impl Suit {
     }
 }
 
+#[derive(Debug, EnumIter, Copy, Clone)]
 enum Rank {
     King,
     Queen,
@@ -52,15 +62,45 @@ impl Rank {
     }
 }
 
+#[derive(Debug)]
 struct Card {
     rank: Rank,
     suit: Suit
 }
 
+impl Display for Card {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+       write!(f, "[ {} {} ]",self.rank.to_string(),self.suit.to_string())
+    }
+}
+
 impl Card {
-    fn to_string(&self)->String {
+    pub fn to_string(&self)->String {
         format!("[ {} {} ]",self.rank.to_string(),self.suit.to_string())
     }
+
+    pub fn new(rank:Rank, suit:Suit) -> Self {
+        Self {
+            rank: rank,
+            suit: suit
+        }
+    }
+}
+
+fn create_cards() -> Vec<Card>{
+    let mut cards = Vec::<Card>::new();
+
+    for r in Rank::iter() {
+        for s in Suit::iter() {
+            cards.push(Card::new(r,s))
+        }
+    };
+
+    let mut rng = thread_rng();
+    cards.shuffle(&mut rng);
+
+    cards
+
 }
 
 fn main() {
@@ -73,10 +113,14 @@ fn main() {
 
     c.suit = Suit::Clubs;
 
-    println!("card {}",c.to_string());
-}
+    c = Card::new(Rank::Ace, Suit::Hearts);
 
-fn random_card() -> i32 {
-    let mut rng = rand::thread_rng();
-    rng.gen_range(1..=11)
+    //println!("card {}",c.to_string());
+    //println!("{}",c.rank.to_string());
+
+    //println!("card {}", c);
+    println!("card {}", c);
+
+    let cards = create_cards();
+    println!("{:?}",cards);
 }
